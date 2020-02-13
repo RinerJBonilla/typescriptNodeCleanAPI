@@ -4,11 +4,14 @@ export class User {
     public password: string,
     public id?: number
   ) {
-    if (!username) {
+    console.log("Time to create a user");
+    console.log(username);
+    console.log(password);
+    if (!username || username.length === 0) {
       throw new Error("User must have username");
     }
 
-    if (!password) {
+    if (!password || password.length === 0) {
       throw new Error("User must have password");
     }
     //more validations according to the policies

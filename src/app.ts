@@ -17,6 +17,11 @@ import UserUseCase from "./use-cases/users/userUseCase";
 import UserController from "./controller/userController";
 import UserRouter from "./routes/user.routes";
 
+import Commentdb from "./data-access/comment.db";
+import CommentUseCase from "./use-cases/comments/commentUseCase";
+import CommentController from "./controller/commentController";
+import CommentRouter from "./routes/comment.routes";
+
 export class App {
   public app: Application;
   constructor() {
@@ -55,8 +60,18 @@ export class App {
 
     const userRouter: UserRouter = new UserRouter(userController);
 
+    //Comments
+    const commentDb: Commentdb = new Commentdb(dConnection);
+    const commentUseCase: CommentUseCase = new CommentUseCase(commentDb);
+    const commentController: CommentController = new CommentController(
+      commentUseCase
+    );
+
+    const commentRouter: CommentRouter = new CommentRouter(commentController);
+
     this.app.use(postRouter.getRoutes());
     this.app.use(userRouter.getRoutes());
+    this.app.use(commentRouter.getRoutes());
   }
 
   async listen() {

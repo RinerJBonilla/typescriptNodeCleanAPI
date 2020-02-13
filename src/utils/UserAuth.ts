@@ -12,6 +12,9 @@ export default class UserAuth {
   }
 
   genPassword(pass: string) {
+    if (!pass || pass.length == 0) {
+      throw Error("must provide a password");
+    }
     console.log(pass);
     return bcrypt.hashSync(pass, this.genSalt());
   }
