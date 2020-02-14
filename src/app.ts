@@ -2,7 +2,7 @@ import express, { Application } from "express";
 import morgan from "morgan";
 import dotenv from "dotenv";
 import helmet from "helmet";
-import cors from "helmet";
+import cors from "cors";
 import { handleAPIDocs } from "./configs/apiDocs";
 
 import DConnection from "./database";

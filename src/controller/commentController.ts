@@ -15,7 +15,7 @@ export default class CommentController {
         req.params.commentid
       );
       if (!comment) {
-        return res.status(404).json({ message: "comment not found" });
+        return res.status(400).json({ message: "comment not found" });
       }
       return res.json(comment);
     } catch (error) {

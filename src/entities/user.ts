@@ -15,6 +15,9 @@ export class User {
       throw new Error("User must have password");
     }
     //more validations according to the policies
+    if (username.length > 12) {
+      throw new Error("Username too long, MAX(12)");
+    }
   }
   getUsername(): string {
     return this.username;

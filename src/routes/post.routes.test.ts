@@ -38,7 +38,7 @@ describe("Post Routes", () => {
         authtoken: process.env.T_D_TOKEN ? process.env.T_D_TOKEN : "bla"
       });
     console.log("VIBE CHECK", res.body);
-    expect(res.status).toEqual(404);
+    expect(res.status).toEqual(400);
     expect(res.body.message).toEqual("post not found");
   });
 

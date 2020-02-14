@@ -1,5 +1,6 @@
 import DConnection from "../database";
 import { Post } from "../entities/post";
+import { PostData } from "../entities/PostData";
 
 export default class Postdb {
   public conn: DConnection;
@@ -80,18 +81,12 @@ export default class Postdb {
     });
   }
 
-  async getPost(postId: number): Promise<Post> {
+  async getPost(postId: number): Promise<PostData> {
     try {
       const qry = `
-        select 
-          id, 
-          title, 
-          description, 
-          content,
-          userid 
-        from posts where id = :postId`;
+      select users.username, posts.description, posts.title, posts.content from posts inner join users on posts.userid = users.id where posts.id = :postId`;
 
-      const posts: Post[] = await this.conn.Query(qry, { postId });
+      const posts: PostData[] = await this.conn.Query(qry, { postId });
       return posts[0];
     } catch (error) {
       console.log(error);
@@ -99,18 +94,12 @@ export default class Postdb {
     }
   }
 
-  async getMyPost(postId: number, userId: number): Promise<Post> {
+  async getMyPost(postId: number, userId: number): Promise<PostData> {
     try {
       const qry = `
-        select 
-          id, 
-          title, 
-          description, 
-          content,
-          userid 
-        from posts where id = :postId and userid = :userId`;
+      select users.username, posts.description, posts.title, posts.content from posts inner join users on posts.userid = users.id where posts.id = :userId`;
 
-      const posts: Post[] = await this.conn.Query(qry, { postId, userId });
+      const posts: PostData[] = await this.conn.Query(qry, { postId, userId });
       return posts[0];
     } catch (error) {
       console.log(error);

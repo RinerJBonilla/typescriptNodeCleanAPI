@@ -118,7 +118,7 @@ export default class CommentUseCase {
         throw Error("comment does not exist");
       }
       let eComment = new Comment(
-        commentInfo.message,
+        "commentInfo.message",
         commentInfo.postid,
         commentInfo.userid,
         commentInfo.id

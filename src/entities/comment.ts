@@ -15,6 +15,9 @@ export class Comment {
       throw Error("must provide a userid");
     }
     //more validations according to the policies
+    if (message.length > 1024) {
+      throw Error("message too long, MAX(1024)");
+    }
   }
 
   getMessage(): string {
