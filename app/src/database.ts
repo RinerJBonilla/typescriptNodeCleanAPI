@@ -32,8 +32,11 @@ export default class DConnetion {
       user: this.user,
       password: this.password,
       database: this.database,
-      port: this.port
+      port: this.port,
+      connectTimeout: 10000
     });
+
+    console.log(this.connectionPool);
   }
 
   connect() {

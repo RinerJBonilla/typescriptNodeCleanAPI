@@ -76,6 +76,6 @@ export class App {
 
   async listen() {
     await this.app.listen(this.app.get("port"));
-    console.log("server running on: ", this.app.get("port"));
+    console.log("Server Running On=", this.app.get("port"));
   }
 }

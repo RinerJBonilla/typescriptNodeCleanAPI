@@ -84,7 +84,7 @@ export default class Postdb {
   async getPost(postId: number): Promise<PostData> {
     try {
       const qry = `
-      select users.username, posts.description, posts.title, posts.content from posts inner join users on posts.userid = users.id where posts.id = :postId`;
+      select users.username, posts.description, posts.title, posts.content, posts.id from posts inner join users on posts.userid = users.id where posts.id = :postId`;
 
       const posts: PostData[] = await this.conn.Query(qry, { postId });
       return posts[0];
@@ -97,7 +97,7 @@ export default class Postdb {
   async getMyPost(postId: number, userId: number): Promise<PostData> {
     try {
       const qry = `
-      select users.username, posts.description, posts.title, posts.content from posts inner join users on posts.userid = users.id where posts.id = :userId`;
+      select users.username, posts.description, posts.title, posts.content, posts.id from posts inner join users on posts.userid = users.id where posts.id = :userId`;
 
       const posts: PostData[] = await this.conn.Query(qry, { postId, userId });
       return posts[0];

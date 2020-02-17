@@ -3,4 +3,5 @@ export interface PostData {
   description: string;
   content: string;
   username: string;
+  id?: number;
 }
