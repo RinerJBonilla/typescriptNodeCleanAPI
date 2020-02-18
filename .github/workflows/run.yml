@@ -26,11 +26,11 @@ jobs:
       - name: run test db
         run: docker run -d -p 3308:3306 db_test
         env:
-          T_D_HOST: localhost
-          T_D_USER: root
-          T_D_PASSWORD: "123456"
-          T_D_DATABASE: tester
-          T_D_DBPORT: 3308
+          T_D_HOST: ${{ T_D_HOST }}
+          T_D_USER: ${{ T_D_USER }}
+          T_D_PASSWORD: ${{ T_D_PASSWORD }}
+          T_D_DATABASE: ${{ T_D_DATABASE }}
+          T_D_DBPORT: ${{ T_D_DBPORT }}
           T_D_TOKEN: ${{secrets.T_D_TOKEN}}
           TOKEN_SECRET: ${{secrets.TOKEN_SECRET}}
           PORT: 3001
