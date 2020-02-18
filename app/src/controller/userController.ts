@@ -15,7 +15,7 @@ export default class UserController {
     try {
       const exists = await this.userService.FindUser(req.body.username);
       if (!exists) {
-        return res.status(404).json({ message: "user does not exist" });
+        return res.status(400).json({ message: "user does not exist" });
       }
       const valPassword = this.userAuth.comparePass(
         req.body.password,
@@ -57,7 +57,7 @@ export default class UserController {
       const userId = req.params.id;
       const user = await this.userService.BringUser(userId);
       if (!user) {
-        return res.status(404).json({ message: "user not found" });
+        return res.status(400).json({ message: "user not found" });
       }
       return res.json(user);
     } catch (error) {

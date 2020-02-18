@@ -15,7 +15,7 @@ export default class PostController {
       const postId = req.params.id;
       const post = await this.postService.BringPost(postId);
       if (!post) {
-        return res.status(404).json({ message: "post not found" });
+        return res.status(400).json({ message: "post not found" });
       }
       return res.json(post);
     } catch (error) {
@@ -27,13 +27,14 @@ export default class PostController {
   createPost = async (req: Request, res: Response) => {
     console.log("controller: ", req.body);
     try {
-      if (res.locals.payload.id !== Number(req.body.userid)) {
-        console.log(res.locals.payload.id);
-        console.log(Number(req.body.userid));
-        return res.status(400).json({
-          message: "ACCESS DENIED: can't create a post with selected user"
-        });
-      }
+      // if (res.locals.payload.id !== Number(req.body.userid)) {
+      //   console.log(res.locals.payload.id);
+      //   console.log(Number(req.body.userid));
+      //   return res.status(400).json({
+      //     message: "ACCESS DENIED: can't create a post with selected user"
+      //   });
+      // }
+      req.body["userid"] = res.locals.payload.id;
       const rep = await this.postService.AddPost(req.body);
       console.log(rep);
       return res.json({ message: "post created" });
@@ -45,14 +46,14 @@ export default class PostController {
 
   deletePost = async (req: Request, res: Response): Promise<Response> => {
     try {
-      if (res.locals.payload.id !== Number(req.body.userid)) {
-        return res.status(400).json({
-          message: "ACCESS DENIED: can't delete this post with your credentials"
-        });
-      }
+      // if (res.locals.payload.id !== Number(req.body.userid)) {
+      //   return res.status(400).json({
+      //     message: "ACCESS DENIED: can't delete this post with your credentials"
+      //   });
+      // }
       const rep = await this.postService.removePost(
         req.params.id,
-        req.body.userid
+        res.locals.payload.id
       );
       return res.json({ message: "post deleted", id: rep });
     } catch (error) {
@@ -73,12 +74,13 @@ export default class PostController {
 
   updatePosts = async (req: Request, res: Response): Promise<Response> => {
     try {
-      if (res.locals.payload.id !== Number(req.body.userid)) {
-        return res.status(400).json({
-          message: "ACCESS DENIED: can't update this post with your credentials"
-        });
-      }
+      // if (res.locals.payload.id !== Number(req.body.userid)) {
+      //   return res.status(400).json({
+      //     message: "ACCESS DENIED: can't update this post with your credentials"
+      //   });
+      // }
       req.body["id"] = req.params.id;
+      req.body["userid"] = res.locals.payload.id;
       const rep = await this.postService.editPost(req.body);
       return res.json({ message: "post updated" });
     } catch (error) {
@@ -113,7 +115,7 @@ export default class PostController {
       const userId = req.params.userid;
       const post = await this.postService.BringMyPost(postId, userId);
       if (!post) {
-        return res.status(404).json({ message: "post not found" });
+        return res.status(400).json({ message: "post not found" });
       }
       return res.json(post);
     } catch (error) {
@@ -124,10 +126,7 @@ export default class PostController {
 
   editMyPost = async (req: Request, res: Response): Promise<Response> => {
     try {
-      if (
-        res.locals.payload.id !== Number(req.body.userid) ||
-        res.locals.payload.id !== Number(req.params.userid)
-      ) {
+      if (res.locals.payload.id !== Number(req.params.userid)) {
         return res.status(400).json({
           message: "ACCESS DENIED: can't update this post with your credentials"
         });
@@ -135,7 +134,7 @@ export default class PostController {
       req.body["id"] = req.params.id;
       const rep = await this.postService.editMyPost(
         req.body,
-        req.params.userid
+        res.locals.payload.id
       );
       return res.json({ message: "post updated" });
     } catch (error) {
@@ -153,7 +152,7 @@ export default class PostController {
       }
       const rep = await this.postService.removePost(
         req.params.id,
-        req.params.userid
+        res.locals.payload.id
       );
       return res.json({ message: "post deleted", id: rep });
     } catch (error) {

@@ -1,7 +1,6 @@
 import PostController from "../controller/postController";
 import VerifyToken from "../middlewares/VerifyToken";
 import { Router } from "express";
-import verififyToken from "../middlewares/VerifyToken";
 
 export default class PostRouter {
   private router: any;

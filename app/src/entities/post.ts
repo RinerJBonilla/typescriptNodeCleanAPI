@@ -22,6 +22,17 @@ export class Post {
       throw new Error("Post must have userid");
     }
     //more validations according to the policies
+    if (title.length > 50) {
+      throw new Error("title too long, MAX(50)");
+    }
+
+    if (description.length > 50) {
+      throw new Error("description too long, MAX(50)");
+    }
+
+    if (content.length > 10000) {
+      throw new Error("content too long, MAX(10000)");
+    }
   }
 
   getContent(): string {

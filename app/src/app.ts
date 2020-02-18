@@ -2,7 +2,7 @@ import express, { Application } from "express";
 import morgan from "morgan";
 import dotenv from "dotenv";
 import helmet from "helmet";
-import cors from "helmet";
+import cors from "cors";
 import { handleAPIDocs } from "./configs/apiDocs";
 
 import DConnection from "./database";
@@ -16,6 +16,11 @@ import Userdb from "./data-access/user.db";
 import UserUseCase from "./use-cases/users/userUseCase";
 import UserController from "./controller/userController";
 import UserRouter from "./routes/user.routes";
+
+import Commentdb from "./data-access/comment.db";
+import CommentUseCase from "./use-cases/comments/commentUseCase";
+import CommentController from "./controller/commentController";
+import CommentRouter from "./routes/comment.routes";
 
 export class App {
   public app: Application;
@@ -55,12 +60,22 @@ export class App {
 
     const userRouter: UserRouter = new UserRouter(userController);
 
+    //Comments
+    const commentDb: Commentdb = new Commentdb(dConnection);
+    const commentUseCase: CommentUseCase = new CommentUseCase(commentDb);
+    const commentController: CommentController = new CommentController(
+      commentUseCase
+    );
+
+    const commentRouter: CommentRouter = new CommentRouter(commentController);
+
     this.app.use(postRouter.getRoutes());
     this.app.use(userRouter.getRoutes());
+    this.app.use(commentRouter.getRoutes());
   }
 
   async listen() {
     await this.app.listen(this.app.get("port"));
-    console.log("server running on: ", this.app.get("port"));
+    console.log("Server Running On=", this.app.get("port"));
   }
 }

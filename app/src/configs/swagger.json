@@ -9,11 +9,11 @@
       "url": "https://opensource.org/licences/MIT"
     }
   },
-  "host": "localhost:4007",
+  "host": "localhost:3001",
   "basePath": "",
   "tags": [
     {
-      "name": "posts",
+      "name": "Posts",
       "description": "API for posts"
     }
   ],
@@ -53,7 +53,7 @@
             "description": "Create a new post for your blog",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/Post"
+              "$ref": "#/definitions/PostData"
             }
           }
         ],
@@ -92,10 +92,10 @@
           "200": {
             "description": "success",
             "schema": {
-              "$ref": "#/definitions/Post"
+              "$ref": "#/definitions/PostInfo"
             }
           },
-          "404": {
+          "400": {
             "description": "post not found"
           }
         },
@@ -125,7 +125,7 @@
             "description": "edit post for your blog",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/Post"
+              "$ref": "#/definitions/PostData"
             }
           }
         ],
@@ -133,7 +133,7 @@
           "200": {
             "description": "post updated"
           },
-          "404": {
+          "400": {
             "description": "post not found"
           }
         },
@@ -156,22 +156,13 @@
             "description": "ID of post to delete",
             "required": true,
             "type": "integer"
-          },
-          {
-            "in": "body",
-            "name": "body",
-            "description": "delete a post from your blog",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/UserId"
-            }
           }
         ],
         "responses": {
           "200": {
             "description": "post deleted"
           },
-          "404": {
+          "400": {
             "description": "post not found"
           }
         },
@@ -204,9 +195,6 @@
         "responses": {
           "200": {
             "description": "token session"
-          },
-          "404": {
-            "description": "user does not exist"
           },
           "400": {
             "description": "incorrect credentials"
@@ -285,7 +273,7 @@
               "$ref": "#/definitions/UserData"
             }
           },
-          "404": {
+          "400": {
             "description": "user not found"
           }
         },
@@ -323,9 +311,6 @@
           "200": {
             "description": "user updated"
           },
-          "404": {
-            "description": "user not found"
-          },
           "400": {
             "description": "you're not allowed to edit this user"
           }
@@ -354,9 +339,6 @@
         "responses": {
           "200": {
             "description": "user deleted"
-          },
-          "404": {
-            "description": "post not found"
           },
           "400": {
             "description": "you're not allowed to delete this user"
@@ -427,10 +409,10 @@
           "200": {
             "description": "success",
             "schema": {
-              "$ref": "#/definitions/Post"
+              "$ref": "#/definitions/PostInfo"
             }
           },
-          "404": {
+          "400": {
             "description": "post not found"
           }
         },
@@ -475,9 +457,6 @@
           "200": {
             "description": "post updated"
           },
-          "404": {
-            "description": "post not found"
-          },
           "400": {
             "description": "ACCESS DENIED: can't update this post with your credentials"
           },
@@ -517,14 +496,227 @@
           "200": {
             "description": "post deleted"
           },
-          "404": {
-            "description": "post not found"
-          },
           "400": {
             "description": "ACCESS DENIED: can't delete this post with your credentials"
           },
           "500": {
             "description": "user does not own this post"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/comments": {
+      "get": {
+        "tags": ["Comments"],
+        "summary": "get All the comments",
+        "description": "Returns a list of all comments",
+        "operationId": "GetComments",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "succers",
+            "schema": {
+              "$ref": "#/definitions/Comments"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/posts/{postId}/comments": {
+      "get": {
+        "tags": ["Post's Comments"],
+        "summary": "get All the comments from a post",
+        "description": "Returns a list of post's comments",
+        "operationId": "GetMyComments",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "description": "ID of the post",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "succes",
+            "schema": {
+              "$ref": "#/definitions/Comments"
+            }
+          },
+          "400": {
+            "description": "no comments"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "post": {
+        "tags": ["Post's Comments"],
+        "summary": "post a new comment on a post",
+        "description": "Returns validation message",
+        "operationId": "postComment",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "description": "ID of the post",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "message of the comment",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CommentData"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "comment created"
+          },
+          "500": {
+            "description": "must provice a message"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/posts/{postId}/comments/{commentId}": {
+      "get": {
+        "tags": ["Post's Comments"],
+        "summary": "reads a comment on a post",
+        "description": "Returns the comment of the post",
+        "operationId": "getMyComment",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "description": "ID of the post",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "commentId",
+            "in": "path",
+            "description": "ID of the comment",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "succers",
+            "schema": {
+              "$ref": "#/definitions/CommentInfo"
+            }
+          },
+          "500": {
+            "description": "post does not exist"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "put": {
+        "tags": ["Post's Comments"],
+        "summary": "updates a comment on a post",
+        "description": "Returns validation message",
+        "operationId": "putComment",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "description": "ID of the post",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "commentId",
+            "in": "path",
+            "description": "ID of the comment",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "message of the comment",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CommentData"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "comment updated"
+          },
+          "500": {
+            "description": "must provice a message"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": ["Post's Comments"],
+        "summary": "delete a comment off a post",
+        "description": "Returns validation message",
+        "operationId": "deleteComment",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "description": "ID of the post",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "commentId",
+            "in": "path",
+            "description": "ID of the comment",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "comment deleted"
+          },
+          "500": {
+            "description": "user can't delete this comment"
           }
         },
         "security": [
@@ -571,6 +763,37 @@
         }
       }
     },
+    "PostInfo": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        }
+      }
+    },
+    "PostData": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        }
+      }
+    },
     "UserId": {
       "type": "object",
       "properties": {
@@ -600,6 +823,51 @@
       "type": "array",
       "items": {
         "$ref": "#/definitions/UserData"
+      }
+    },
+    "Comment": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number"
+        },
+        "message": {
+          "type": "string"
+        },
+        "postid": {
+          "type": "number"
+        },
+        "userid": {
+          "type": "number"
+        }
+      }
+    },
+    "CommentData": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "CommentInfo": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number"
+        },
+        "message": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        }
+      }
+    },
+    "Comments": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/CommentInfo"
       }
     }
   }

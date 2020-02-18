@@ -38,7 +38,7 @@ describe("User Routes", () => {
         authtoken: process.env.T_D_TOKEN ? process.env.T_D_TOKEN : "bla"
       });
     console.log("VIBE CHECK", res.body);
-    expect(res.status).toEqual(404);
+    expect(res.status).toEqual(400);
     expect(res.body.message).toEqual("user not found");
   });
 
@@ -87,7 +87,7 @@ describe("User Routes", () => {
         password: "1234"
       });
     console.log("CREATE----", res.body.message);
-    expect(res.status).toEqual(404);
+    expect(res.status).toEqual(400);
     expect(res.body.message).toEqual("user does not exist");
   });
 
