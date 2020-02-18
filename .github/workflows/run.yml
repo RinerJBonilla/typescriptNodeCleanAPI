@@ -22,6 +22,9 @@ jobs:
 
       - name: build docker test db
         run: docker build -t db_test ./test
+      
+      - name: run test db
+        run: docker run -p 3308:3306 db_test
 
       - name: Install dependencies
         run: npm install
@@ -30,6 +33,11 @@ jobs:
       - name: Test app
         run: npm test
         working-directory: ./app
+        env: 
+          T_D_HOST: localhost
+          T_D_USER: root
+          T_D_PASSWORD: 123456
+          T_D_DATABASE: tester
 
       - name: Build application
         run: npm run build --if-present
