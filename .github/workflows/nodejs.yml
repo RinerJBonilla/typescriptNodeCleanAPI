@@ -7,6 +7,7 @@ jobs:
     steps:
       - name: Shutdown Ubuntu MySQL (SUDO)
         run: sudo service mysql stop
+        working-directory: ./app
       - name: setup mariadb
         uses: getong/mariadb-action@v1.1
         with:
@@ -17,13 +18,14 @@ jobs:
           mysql root password: '123456'
       - name: add database
         run: mysql -u root -p tester < tester.sql
-      - uses: actions/checkout@master
+        working-directory: ./app
+      - uses: workflows/checkout@master
       - name: npm install
         uses: actions/npm@master
         with:
           args: install
       - name: npm test
-        uses: actions/npm@master
+        uses: workflows/npm@master
         with:
           args: run test
       - name: docker build
