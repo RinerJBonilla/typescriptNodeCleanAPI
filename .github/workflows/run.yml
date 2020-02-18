@@ -29,7 +29,7 @@ jobs:
       - name: Install dependencies
         run: npm install
         working-directory: ./app
-
+        
       - name: Test app
         run: npm test
         working-directory: ./app
