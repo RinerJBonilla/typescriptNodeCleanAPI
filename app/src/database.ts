@@ -19,6 +19,13 @@ export default class DConnetion {
       this.password = process.env.T_D_PASSWORD;
       this.database = process.env.T_D_DATABASE;
       this.port = Number(process.env.T_D_DBPORT);
+      console.log({
+        host: this.host,
+        user: this.user,
+        password: this.password,
+        database: this.database,
+        port: this.port
+      });
     } else {
       this.host = process.env.D_HOST;
       this.user = process.env.D_USER;
@@ -35,8 +42,6 @@ export default class DConnetion {
       port: this.port,
       connectTimeout: 10000
     });
-
-    console.log(this.connectionPool);
   }
 
   connect() {
