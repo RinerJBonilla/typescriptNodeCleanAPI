@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc ",
     "dev": "nodemon src/index.ts --exec ts-node",
-    "test": "IS_TESTING=true jest --notify --env=node"
+    "test": "IS_TESTING=true jest --detectOpenHandles --forceExit --env=node"
   },
   "keywords": [],
   "author": "",
