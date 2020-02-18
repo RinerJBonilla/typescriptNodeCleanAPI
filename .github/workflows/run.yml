@@ -1,8 +1,8 @@
 name: Node.js CI
 
-on: 
+on:
   push:
-    branches: 
+    branches:
       - testing
 jobs:
   build:
@@ -22,18 +22,18 @@ jobs:
 
       - name: build docker test db
         run: docker build -t db_test ./test
-      
+
       - name: run test db
         run: docker run -p 3308:3306 db_test
 
       - name: Install dependencies
         run: npm install
         working-directory: ./app
-        
+
       - name: Test app
         run: npm test
         working-directory: ./app
-        env: 
+        env:
           T_D_HOST: localhost
           T_D_USER: root
           T_D_PASSWORD: 123456
