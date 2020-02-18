@@ -5,4 +5,4 @@ ENV MYSQL_DATABASE=tester
 
 # Add init script
 ADD tester.sql /docker-entrypoint-initdb.d
-EXPOSE 3308
+EXPOSE 3306
