@@ -24,7 +24,7 @@ jobs:
         run: docker build -t db_test ./test
 
       - name: run test db
-        run: docker run -p 3308:3306 db_test
+        run: docker run -d -p 3308:3306 db_test
 
       - name: Install dependencies
         run: npm install
